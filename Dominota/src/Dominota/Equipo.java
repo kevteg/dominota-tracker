@@ -8,15 +8,23 @@ public class Equipo {
 
     private String nombre;
     private int puntos;
-    private List <String> manos;
     private List<Jugador> jugador;
+    private List <Integer> manos;
+    private List <Integer> turno_mano;
 
     public Equipo() {
         nombre = "";
         puntos = 0;
-        manos = new ArrayList <String>();
+        manos = new ArrayList <Integer>();
+        turno_mano = new ArrayList <Integer>();
         this.jugador = new ArrayList <Jugador>();
     }
+    
+     public void asignar_puntos(int puntos){
+        this.puntos+=puntos;
+        
+    }
+            
 
     public String getNombre() {
         return nombre;
@@ -26,9 +34,13 @@ public class Equipo {
         return puntos;
     }
     
-    public List<String> getManos(){
-        return (List<String>) manos;
+    public List<Integer> getManos(){
+        return (List<Integer>) manos;
     }
+    
+    public List<Integer> GetTurno(){
+        return (List<Integer>)turno_mano;
+    } 
     
     public List<Jugador> getJugador(){
        
@@ -43,14 +55,19 @@ public class Equipo {
         this.puntos = puntos;
     }
     
-    public void SetManos(String manos){
+    public void SetManos(int manos){
     this.manos.add(manos);
+    }
+    
+    public void setTurno(int turno){
+        this.turno_mano.add(turno);
     }
     
     public void setJugador(Jugador jugador){
         this.jugador.add(jugador);
-    
     }
+    
+    
     
     public void listarEquipos(){
         System.out.println("Equipo: " + nombre);

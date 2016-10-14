@@ -23,7 +23,9 @@ public class Main {
       //j.AgregarEquipo();
       //j.ObtenerEquipos();
       j.domino();
-      j.ObtenerPartida();
+      //j.ObtenerPartidaJugador();
+      j.ObtenerPartidaEquipo();
+              
     }
 
     public static void insert(ObjectContainer db) throws IOException {

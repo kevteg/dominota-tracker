@@ -41,8 +41,18 @@ public class Partida {
         
     }
     
+    public void SetEquipo(List<Equipo> equipo){
+        this.equipo.addAll(equipo);
+        
+    }
+    
     public List<Jugador> getJugador(){
        
        return (List<Jugador>) jugador;
+   }
+    
+    public List<Equipo> getEquipo(){
+       
+       return (List<Equipo>) equipo;
    }
 }
