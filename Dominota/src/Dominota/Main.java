@@ -10,7 +10,7 @@ import java.util.List;
 public class Main {
    
 
-    final static String DB4ONOMBRE = "C:\\Users\\JOSE\\Downloads\\Dominota\basededatos.db4o";
+    final static String DB4ONOMBRE = "basededatos.db4o";
     static ObjectContainer bdatos;
     static InputStreamReader isr = new InputStreamReader(System.in);
     static BufferedReader leer = new BufferedReader(isr);
