@@ -19,7 +19,7 @@ import java.util.List;
  */
 public class Dbgestor {
     private ObjectContainer bdatos;
-    final static String DB4ONOMBRE = "basededatos.db4o";
+    final static String DB4ONOMBRE = "/home/keeeevin/Documents/dominota-tracker/Dominota/basededatos.db4o";
     static InputStreamReader isr = new InputStreamReader(System.in);
     static BufferedReader leer = new BufferedReader(isr);
     
