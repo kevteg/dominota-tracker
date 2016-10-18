@@ -8,12 +8,7 @@ public class Jugador {
     private String nombre;
     private int puntos;
     private List <Integer> manos;
-    private List <Integer> turno_mano;
-    
-   
-    
-    
-    
+    private List <Integer> turno_mano;    
     public Jugador(String nombre) {
         this.nombre = nombre;
         puntos = 0;

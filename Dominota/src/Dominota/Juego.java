@@ -29,7 +29,6 @@ public class Juego {
         System.out.println("Partida nueva-- 1.Equipo  2.Individual");
         opc = sc.nextInt();
         partida(opc);
-    
     }
     
     public void dominoInterface(){
@@ -48,7 +47,8 @@ public class Juego {
     
     public void partidaInterfaz(int opc){
         if(opc == 1){
-            this.frame.addPanelEquipo();
+            this.frame.addPanelEquipo(db);
+            
         }
     }
     

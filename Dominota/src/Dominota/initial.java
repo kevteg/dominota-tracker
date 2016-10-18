@@ -5,7 +5,10 @@
  */
 package Dominota;
 
+import java.awt.BorderLayout;
+import java.awt.Color;
 import javax.swing.JOptionPane;
+import javax.swing.JPanel;
 
 /**
  *
@@ -18,27 +21,7 @@ public class initial extends javax.swing.JFrame {
      */
     public initial() {
         initComponents();
-        equipoPanel panelE = new equipoPanel();
-        
-        this.getContentPane().remove(panelPrincipal);
-       
-        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
-        layout.setHorizontalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(panelE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addContainerGap())
-        );
-       
-        //this.getContentPane().remove(this.panelPrincipal);
-        
-        panelE.setVisible(true);
-        panelE.validate();
-        setVisible(true);
-        validate();
-        repaint();
-        pack();
+        setResizable(false);
     }
 
     /**
@@ -112,13 +95,16 @@ public class initial extends javax.swing.JFrame {
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
       j.dominoInterface();
     }//GEN-LAST:event_jButton1ActionPerformed
-    public void addPanelEquipo() { 
-        
-        /*this.panelPrincipal.setVisible(false);
-        System.out.println("out");
-        this.panelE.setVisible(true);
-        this.validate();
-        this.repaint();*/
+    public void addPanelEquipo(Dbgestor db) { 
+        equipoPanel panelE = new equipoPanel(db);
+        panelE.setBackground(Color.white);
+        this.getContentPane().removeAll();
+        this.setLayout(new BorderLayout());
+        this.add(panelE, BorderLayout.CENTER);        
+        pack();
+        /*getContentPane().validate();
+        getContentPane().repaint();*/
+        setVisible(true);
     }  
     /**
      * @param args the command line arguments
