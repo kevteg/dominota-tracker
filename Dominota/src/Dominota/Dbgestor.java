@@ -8,6 +8,8 @@ package Dominota;
 
 import com.db4o.Db4oEmbedded;
 import com.db4o.ObjectContainer;
+import com.db4o.query.Predicate;
+import com.db4o.query.Query;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.InputStreamReader;
@@ -19,7 +21,7 @@ import java.util.List;
  */
 public class Dbgestor {
     private ObjectContainer bdatos;
-    final static String DB4ONOMBRE = "C:\\Users\\jose.martinezl\\Desktop\\Dominota\\basededatos.db4o";
+    final static String DB4ONOMBRE = "C:\\Users\\Principal\\Desktop\\Dominota\\basededatos.db4o";
     static InputStreamReader isr = new InputStreamReader(System.in);
     static BufferedReader leer = new BufferedReader(isr);
     
@@ -63,13 +65,186 @@ public class Dbgestor {
     }
     
     
-      public static void imprimirLista(List<?> result) {
-        System.out.println("Total Objetos recuperados" + result.size());
-        int nl = 0;
-        for (Object o : result) {
-            System.out.println(nl + ". " + o);
-            nl++;
+    public List<Partida> PartidaJugador(String name){
+        
+        final String nombre = name; 
+        List <Partida> partida = bdatos.query(new Predicate<Partida>() {
+        @Override
+            
+       public boolean match(Partida pa) {
+                
+            for(Jugador ju : pa.getJugador()){
+                if(ju.GetPuntos()>=pa.GetPuntos() && ju.getNombre().equals(nombre))
+                    return ju.GetPuntos()>=pa.GetPuntos() && ju.getNombre().equals(nombre);
+                        
+                }
+                return pa.GetPuntos()==0;
+            }
+           
+         });
+            return partida;
         }
-    }
+      public List<Partida> PartidaJugadorGanadas(String name,String fecha){
+        
+            final String nombre = name; 
+            final String date = fecha;
+            List <Partida> partida = bdatos.query(new Predicate<Partida>() {
+            @Override
+            
+            public boolean match(Partida pa) {
+                
+                for(Jugador ju : pa.getJugador()){
+                     if( ju.GetPuntos()>=pa.GetPuntos() && ju.getNombre().equals(nombre)&&  pa.GetFecha().equals(date)){
+                         System.out.println("hola"); 
+                        return ju.GetPuntos()>=pa.GetPuntos() && ju.getNombre().equals(nombre) && pa.GetFecha().equals(date);
+                     }
+                }
+                return pa.GetPuntos()==0;
+            }
+           
+         });
+            return partida;
+        }
+        
+        
+          public List<Partida> PartidaJugadorPerdidas(String name,String fecha){
+        
+            final String nombre = name; 
+            final String date = fecha;
+            List <Partida> partida = bdatos.query(new Predicate<Partida>() {
+            @Override
+            
+            public boolean match(Partida pa) {
+                
+                for(Jugador eq : pa.getJugador()){
+                     if( eq.GetPuntos()< pa.GetPuntos() && eq.getNombre().equals(nombre) &&  pa.GetFecha().equals(date)){
+                        return eq.GetPuntos()<pa.GetPuntos() && eq.getNombre().equals(nombre) 
+                        && pa.GetFecha().equals(date);
+                        }
+                }
+                return pa.GetPuntos()==0;
+            }
+           
+         });
+            return partida;
+        }  
+        
+        public List<Partida> JugadorZapato (String name,String fecha){
+        
+            final String nombre = name; 
+            final String date = fecha;
+            List <Partida> partida = bdatos.query(new Predicate<Partida>() {
+            @Override
+            
+            public boolean match(Partida pa) {
+                
+                for(Jugador eq : pa.getJugador()){
+                     if( eq.GetPuntos()== 0 && eq.getNombre().equals(nombre) &&  pa.GetFecha().equals(date)){
+                        return eq.GetPuntos()== 0 && eq.getNombre().equals(nombre) 
+                        && pa.GetFecha().equals(date);
+                        }
+                }
+                return pa.GetPuntos()==0;
+            }
+           
+         });
+            return partida;
+        }  
+          
+          
+    
+    
+    
+        public List<Partida> PartidaEquipo(String name){
+        
+            final String nombre = name; 
+            List <Partida> partida = bdatos.query(new Predicate<Partida>() {
+            @Override
+            
+                public boolean match(Partida pa) {
+                
+                    for(Equipo eq : pa.getEquipo()){
+                        if( eq.GetPuntos()>=pa.GetPuntos() && eq.getNombre().equals(nombre))
+                            return eq.GetPuntos()>=pa.GetPuntos() && eq.getNombre().equals(nombre);
+                        
+                        
+                    }
+                    System.out.println("Nada");
+                    return pa.GetPuntos()==0;
+            }
+           
+         });
+            return partida;
+        }
+        
+        public List<Partida> PartidaEquipoGanadas(String name,String fecha){
+        
+            final String nombre = name; 
+            final String date = fecha;
+            List <Partida> partida = bdatos.query(new Predicate<Partida>() {
+            @Override
+            
+            public boolean match(Partida pa) {
+                
+                for(Equipo eq : pa.getEquipo()){
+                     if( eq.GetPuntos()>=pa.GetPuntos() && eq.getNombre().equals(nombre)&&  pa.GetFecha().equals(date)){
+                        return eq.GetPuntos()>=pa.GetPuntos() && eq.getNombre().equals(nombre) && pa.GetFecha().equals(date);
+                     }
+                }
+                return pa.GetPuntos()==0;
+            }
+           
+         });
+            return partida;
+        }
+        
+        
+          public List<Partida> PartidaEquipoPerdidas(String name,String fecha){
+        
+            final String nombre = name; 
+            final String date = fecha;
+            List <Partida> partida = bdatos.query(new Predicate<Partida>() {
+            @Override
+            
+            public boolean match(Partida pa) {
+                
+                for(Equipo eq : pa.getEquipo()){
+                     if( eq.GetPuntos()< pa.GetPuntos() && eq.getNombre().equals(nombre) &&  pa.GetFecha().equals(date)){
+                        return eq.GetPuntos()<pa.GetPuntos() && eq.getNombre().equals(nombre)
+                        && pa.GetFecha().equals(date);
+                        }
+                }
+                return pa.GetPuntos()==0;
+            }
+           
+         });
+            return partida;
+        }
+
+           
+        public List<Partida> EquipoZapato(String name,String fecha){
+        
+            final String nombre = name; 
+            final String date = fecha;
+            List <Partida> partida = bdatos.query(new Predicate<Partida>() {
+            @Override
+            
+            public boolean match(Partida pa) {
+                
+                for(Equipo eq : pa.getEquipo()){
+                     if( eq.GetPuntos()==0 && eq.getNombre().equals(nombre) &&  pa.GetFecha().equals(date)){
+                        return eq.GetPuntos()==0 && eq.getNombre().equals(nombre)
+                        && pa.GetFecha().equals(date);
+                        }
+                }
+                return pa.GetPuntos()==0;
+            }
+           
+         });
+            return partida;
+        }
+
+    
+
     
 }

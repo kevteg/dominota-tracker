@@ -16,11 +16,13 @@ public class Partida {
     private int puntos_maximo;
     private List<Jugador> jugador;
     private List<Equipo> equipo;
-    
+    private String fecha;
+
     public Partida(){
         puntos_maximo = 0;
         jugador = new ArrayList <Jugador>();
         equipo = new ArrayList <Equipo>();
+        fecha = " ";
     }
     
     public Partida(int puntos,List<Jugador> jugador,List<Equipo> equipo){
@@ -31,11 +33,20 @@ public class Partida {
         return puntos_maximo;
     }
     
+    public String GetFecha(){
+        return fecha;
+    }
+    
+    
     public void SetPuntos(int puntos_maximo) {
         this.puntos_maximo = puntos_maximo;
         
     }
     
+    public void SetFecha(String fecha){
+        this.fecha=fecha;
+    
+    }
     public void SetJugador(List<Jugador> jugador){
         this.jugador.addAll(jugador);
         
