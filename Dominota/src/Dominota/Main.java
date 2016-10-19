@@ -19,6 +19,7 @@ public class Main {
          
       Juego j = new Juego ();
       //j.ObtenerJugadores();
+      j.Estadisticas();
       //j.AgregarJugador();
       //j.AgregarEquipo();
       //j.ObtenerEquipos();

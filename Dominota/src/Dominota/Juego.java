@@ -211,10 +211,10 @@ public class Juego {
          List <Equipo> result = db.GetBddatos().query(Equipo.class);
          for (Equipo e : result) {
              e.listarEquipos();
-         }
+         } 
          db.DbClose();
     }
-   //Uobtener todos los jugadores 
+   //obtener todos los jugadores 
     public void ObtenerJugadores () {
         List <Jugador> j = db.GetBddatos().query(Jugador.class);
         for (Jugador ju : j) {
@@ -270,7 +270,7 @@ public class Juego {
       List <Jugador> jugadores = par.getJugador();
       DefaultCategoryDataset dataset = new DefaultCategoryDataset();
         for (int i = 0; i < jugadores.size(); i++) {
-            System.out.println("n: "+jugadores.get(i).getNombre()+"   p: "+jugadores.get(i).GetPuntos());
+           // System.out.println("n: "+jugadores.get(i).getNombre()+"   p: "+jugadores.get(i).GetPuntos());
             dataset.setValue(jugadores.get(i).GetPuntos(), "Puntos", jugadores.get(i).getNombre());
         }
       JFreeChart chart = ChartFactory.createBarChart("Puntos por Jugador",
@@ -287,7 +287,7 @@ public class Juego {
         List <Equipo> equipos = par.getEquipo();
         DefaultCategoryDataset dataset = new DefaultCategoryDataset();
         for (int i = 0; i < equipos.size(); i++) {
-            System.out.println("e: "+equipos.get(i).getNombre()+"   p:"+equipos.get(i).GetPuntos());
+           // System.out.println("e: "+equipos.get(i).getNombre()+"   p:"+equipos.get(i).GetPuntos());
             dataset.setValue(equipos.get(i).GetPuntos(), "Puntos", equipos.get(i).getNombre());
         }
         JFreeChart chart = ChartFactory.createBarChart("Puntos por Equipo",
@@ -297,6 +297,19 @@ public class Juego {
         } catch (IOException e) {
             System.err.println("Error creando grafico de barras.");
         }
+    }
+    
+    public void Estadisticas () {
+        //Numero de jugadores
+        List <Jugador> j = db.GetBddatos().query(Jugador.class);
+        System.out.println("Número de jugadores: "+j.size());
+        //Numero de equipos
+        List <Equipo> result = db.GetBddatos().query(Equipo.class);
+        System.out.println("Número de equipos: "+result.size());
+        //Partidas jugadas
+        List <Partida> p = db.GetBddatos().query(Partida.class);
+        System.out.println("Partidas jugadas: "+p.size());
+        
     }
 
 }
