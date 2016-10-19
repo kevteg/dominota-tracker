@@ -8,6 +8,7 @@ import com.db4o.ObjectSet;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
+import javax.swing.JOptionPane;
 /**
  *
  * @author JOSE
@@ -15,29 +16,40 @@ import java.util.Scanner;
 public class Juego {
     
     private Dbgestor db;
+    private initial frame;
     
-    public Juego(){
+    public Juego(initial frame){
         db = new Dbgestor();
-        
+        this.frame = frame;
     }
-    
     
     public void domino(){
         Scanner sc = new Scanner(System.in);
-        String resp =" ";
         int opc = 0;
         System.out.println("Partida nueva-- 1.Equipo  2.Individual");
         opc = sc.nextInt();
-        
-        if (opc == 1){
-            partida(opc);
+        partida(opc);
+    }
+    
+    public void dominoInterface(){
+        Object[] options = {"Equipo", "Individual"};
+        int n = JOptionPane.showOptionDialog(this.frame,
+        "Tipo de partida",
+        "Nuevo juego",
+        JOptionPane.YES_NO_OPTION,
+        JOptionPane.QUESTION_MESSAGE,
+        null,     //do not use a custom Icon
+        options,  //the titles of buttons
+        options[1]); //default button title
+        System.out.println(n);
+        partidaInterfaz(n + 1);
+    }
+    
+    public void partidaInterfaz(int opc){
+        if(opc == 1){
+            this.frame.addPanelEquipo(db);
             
         }
-        else{
-            partida(opc);
-            //db.DbClose();
-         }
-            
     }
     
     public void partida(int opc){
@@ -45,7 +57,6 @@ public class Juego {
         int player = 0;
         
         if (opc != 1){
-            
             List<Jugador> ju =  AgregarJugador();
             Partida par = new Partida() ;
             int maxpto = 0;
