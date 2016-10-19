@@ -10,7 +10,7 @@ import java.util.List;
 public class Main {
    
 
-    final static String DB4ONOMBRE = "C:\\Users\\JOSE\\Downloads\\Dominota\basededatos.db4o";
+    final static String DB4ONOMBRE = "C:\\Users\\Principal\\Desktop\\Dominota\\basededatos.db4o";
     static ObjectContainer bdatos;
     static InputStreamReader isr = new InputStreamReader(System.in);
     static BufferedReader leer = new BufferedReader(isr);
@@ -26,6 +26,7 @@ public class Main {
         j.domino();
        // j.EmparejarEquipo(DB4ONOMBRE);
         //j.EmparejarJugador(DB4ONOMBRE);
+         //j.ListarJugadorPorEquipo(DB4ONOMBRE);
 //j.ZapatoEquipo("madrid","19/10/2016");
       // j.Porcentaje_victoria_jugador("alex","19/10/2016");
        // j.ListPlayer("alex");

@@ -65,6 +65,28 @@ public class Dbgestor {
     }
     
     
+        public List<Equipo> JugadorPorEquipo(String name){
+        
+        final String nombre = name; 
+        List <Equipo> equipo = bdatos.query(new Predicate<Equipo>() {
+        @Override
+            
+       public boolean match(Equipo eq) {
+                
+            for(Jugador jugador : eq.getJugador()){
+                if (jugador.getNombre().equals(nombre))
+                    return jugador.getNombre().equals(nombre);
+                    
+                
+            }
+           return eq.GetPuntos()==-1;
+       }
+        });
+            return equipo;
+                
+    }
+                
+        
     public List<Partida> PartidaJugador(String name){
         
         final String nombre = name; 

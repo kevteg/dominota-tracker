@@ -311,6 +311,15 @@ public class Juego {
         
         //   db.DbClose();
     }
+    // Equipos en los que ha estado un determinado jugador
+    public void ListarJugadorPorEquipo(String nombre){
+        List <Equipo> equipo = db.JugadorPorEquipo(nombre);
+        System.out.println(nombre + " ha estado en los siguientes equipos: ");
+        
+        for(Equipo eq : equipo)
+            System.out.println(eq.getNombre());
+    
+    }
     //cantidad de veces que jugador obtuvo cero puntos     
     public void ZapatoJugador(String name,String fecha){
         
