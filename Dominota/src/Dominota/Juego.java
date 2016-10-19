@@ -8,7 +8,18 @@ import com.db4o.ObjectSet;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
-import javax.swing.JOptionPane;
+import org.jfree.chart.ChartFactory;
+import org.jfree.chart.ChartUtilities;
+import org.jfree.chart.JFreeChart;
+import java.io.File;
+import org.jfree.chart.plot.*;
+import java.io.*;
+import org.jfree.data.category.DefaultCategoryDataset;
+import org.jfree.data.general.DefaultPieDataset;
+import org.jfree.data.time.Day;
+import org.jfree.data.time.TimeSeriesCollection;
+import org.jfree.data.xy.XYSeries;
+import org.jfree.data.xy.XYSeriesCollection;
 /**
  *
  * @author JOSE
@@ -16,40 +27,29 @@ import javax.swing.JOptionPane;
 public class Juego {
     
     private Dbgestor db;
-    private initial frame;
     
-    public Juego(initial frame){
+    public Juego(){
         db = new Dbgestor();
-        this.frame = frame;
+        
     }
+    
     
     public void domino(){
         Scanner sc = new Scanner(System.in);
+        String resp =" ";
         int opc = 0;
         System.out.println("Partida nueva-- 1.Equipo  2.Individual");
         opc = sc.nextInt();
-        partida(opc);
-    }
-    
-    public void dominoInterface(){
-        Object[] options = {"Equipo", "Individual"};
-        int n = JOptionPane.showOptionDialog(this.frame,
-        "Tipo de partida",
-        "Nuevo juego",
-        JOptionPane.YES_NO_OPTION,
-        JOptionPane.QUESTION_MESSAGE,
-        null,     //do not use a custom Icon
-        options,  //the titles of buttons
-        options[1]); //default button title
-        System.out.println(n);
-        partidaInterfaz(n + 1);
-    }
-    
-    public void partidaInterfaz(int opc){
-        if(opc == 1){
-            this.frame.addPanelEquipo(db);
+        
+        if (opc == 1){
+            partida(opc);
             
         }
+        else{
+            partida(opc);
+            //db.DbClose();
+         }
+            
     }
     
     public void partida(int opc){
@@ -57,6 +57,7 @@ public class Juego {
         int player = 0;
         
         if (opc != 1){
+            
             List<Jugador> ju =  AgregarJugador();
             Partida par = new Partida() ;
             int maxpto = 0;
@@ -99,6 +100,7 @@ public class Juego {
         
             par.SetJugador(ju);
             db.AgregarPartida(par);
+            GraficaPartidaIndividual(par);
         }
         
         if(opc == 1){
@@ -265,6 +267,23 @@ public class Juego {
            }
          db.DbClose();
     
+    }
+    
+    //Grafica de partida actual para jugadores individuales
+    public void GraficaPartidaIndividual(Partida par){
+      List <Jugador> jugadores = par.getJugador();
+      DefaultCategoryDataset dataset = new DefaultCategoryDataset();
+        for (int i = 0; i < jugadores.size(); i++) {
+            System.out.println("n: "+jugadores.get(i).getNombre()+"   p: "+jugadores.get(i).GetPuntos());
+            dataset.setValue(jugadores.get(i).GetPuntos(), "Puntos", jugadores.get(i).getNombre());
+        }
+      JFreeChart chart = ChartFactory.createBarChart("Puntos por Jugador",
+        "Jugadores", "Puntos", dataset, PlotOrientation.VERTICAL, false,true, false);
+        try {
+            ChartUtilities.saveChartAsJPEG(new File("img/GrafJugInd.jpg"), chart, 500,300);
+        } catch (IOException e) {
+            System.err.println("Error creando grafico de barras.");
+        }
     }
 
 }
