@@ -379,9 +379,6 @@ public class Juego {
         ganadas = ListarEquipoGanadas(name,fecha);
         perdidas = ListarEquipoPerdidas(name,fecha);
         total = (float)((ganadas/(ganadas + perdidas))*100);
-        
-       
-        
         System.out.println(name + " ha ganado el " + total + " porciento de sus partidas");
      //   db.DbClose();
     }
@@ -392,13 +389,112 @@ public class Juego {
         ganadas = ListarJugadorGanadas(name,fecha);
         perdidas = ListarJugadorPerdidas(name,fecha);
         total = (float)((ganadas/(ganadas + perdidas))*100);
-        
-       
-        
         System.out.println(name + " ha ganado el " + total + " porciento de sus partidas");
      //   db.DbClose();
     }
     
+        
+    //Parte de las funcionalidades
+     
+    public void EmparejarJugadoresOponentes(float porcentaje,String nombre){
+        List <Jugador> jugador = db.GetBddatos().query(Jugador.class);
+        List <Jugador> oponente = new ArrayList<Jugador>();
+        List <Float> por = new ArrayList<Float>();
+        List <Partida> partida = db.GetBddatos().query(Partida.class);
+        float ganadas=0, perdidas = 0,total =0;
+        ganadas=perdidas=total=0;
+        for(Jugador ju : jugador){
+            if (ju.getNombre().equals(nombre)==false){
+            for(Partida pa : partida){
+                for(Jugador jug : pa.getJugador()){
+                    if(ju.getNombre().equals(jug.getNombre()) && jug.GetPuntos()>=pa.GetPuntos()){
+                        ganadas++;
+                        }
+                    if(ju.getNombre().equals(jug.getNombre()) && jug.GetPuntos()<pa.GetPuntos()){
+                        perdidas++;
+                    }
+                    }
+            }
+            
+            total = ( ganadas / (ganadas + perdidas ) ) * 100;
+            
+            if (porcentaje >= total+10  && porcentaje <= total - 10 ){
+                oponente.add(ju);
+                por.add(total);
+            }
+            }
+        }
+        
+        System.out.println("El jugador "+ nombre + "con " + porcentaje + " % " + "se empareja mejor con: ");
+        int contador = 0;
+        for(Jugador opo : oponente){
+            System.out.println(opo.getNombre() + " " + por.get(contador) );
+            contador++;
+        }        
+    
+    }
+    
+      public void EmparejarEquiposOponentes(float porcentaje,String nombre){
+        
+        List <Equipo> jugador = db.GetBddatos().query(Equipo.class);
+        List <Equipo> oponente = new ArrayList<Equipo>();
+        List <Float> por = new ArrayList<Float>();
+        List <Partida> partida = db.GetBddatos().query(Partida.class);
+        float ganadas=0, perdidas = 0,total =0;
+        
+        for(Equipo ju : jugador){
+            ganadas=perdidas=total=0;
+            if (ju.getNombre().equals(nombre)==false){
+            for(Partida pa : partida){
+                for(Equipo jug : pa.getEquipo()){
+                    if(ju.getNombre().equals(jug.getNombre()) && jug.GetPuntos()>=pa.GetPuntos()){
+                        ganadas++;
+                        }
+                    if(ju.getNombre().equals(jug.getNombre()) && jug.GetPuntos()<pa.GetPuntos()){
+                        perdidas++;
+                    }
+                    }
+            }
+            
+            total = ( ganadas / (ganadas + perdidas ) ) * 100;
+            if (porcentaje >= total+10  && porcentaje <= total - 10 ){
+                oponente.add(ju);
+                por.add(total);
+            }
+            
+            }
+        }
+        
+        System.out.println("El equipo "+ nombre + "con " + porcentaje + " % " + "se empareja mejor con: ");
+        int contador = 0;
+        for(Equipo opo : oponente){
+            System.out.println(opo.getNombre() + " " + por.get(contador) );
+            contador++;
+        }        
+    
+    }
+        
+    public void EmparejarJugador(String nombre){
+        
+        List<Partida> ganadas = db.PartidaJugador(nombre);
+        List<Partida> perdidas = db.PartidaJugadorPerdidas(nombre);
+        float ganar = ganadas.size();
+        float perder = perdidas.size();
+        float porcentaje_victoria = (ganar/(ganar+perder))*100;
+        this.EmparejarJugadoresOponentes(porcentaje_victoria,nombre);
+    
+    
+    }    
+    
+    public void EmparejarEquipo(String nombre){
+        List<Partida> ganadas = db.PartidaEquipo(nombre);
+        List<Partida> perdidas = db.PartidaEquipoPerdidas(nombre);
+        float ganar = ganadas.size();
+        float perder = perdidas.size();
+        float porcentaje_victoria = (ganar/(ganar+perder))*100;
+        this.EmparejarEquiposOponentes(porcentaje_victoria,nombre);
+    
+    }
     
     public void Cerrar_Sesion(){
         db.DbClose();

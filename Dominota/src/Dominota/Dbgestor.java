@@ -83,7 +83,29 @@ public class Dbgestor {
            
          });
             return partida;
-        }
+    }
+    
+     public List<Partida> PartidaJugadorPerdidas(String name){
+        
+        final String nombre = name; 
+        List <Partida> partida = bdatos.query(new Predicate<Partida>() {
+        @Override
+            
+       public boolean match(Partida pa) {
+                
+            for(Jugador ju : pa.getJugador()){
+                if(ju.GetPuntos()<pa.GetPuntos() && ju.getNombre().equals(nombre))
+                    return ju.GetPuntos()<pa.GetPuntos() && ju.getNombre().equals(nombre);
+                        
+                }
+                return pa.GetPuntos()==0;
+            }
+           
+         });
+            return partida;
+    }
+    
+    
       public List<Partida> PartidaJugadorGanadas(String name,String fecha){
         
             final String nombre = name; 
@@ -166,6 +188,28 @@ public class Dbgestor {
                     for(Equipo eq : pa.getEquipo()){
                         if( eq.GetPuntos()>=pa.GetPuntos() && eq.getNombre().equals(nombre))
                             return eq.GetPuntos()>=pa.GetPuntos() && eq.getNombre().equals(nombre);
+                        
+                        
+                    }
+                    System.out.println("Nada");
+                    return pa.GetPuntos()==0;
+            }
+           
+         });
+            return partida;
+        }
+        
+        public List<Partida> PartidaEquipoPerdidas(String name){
+        
+            final String nombre = name; 
+            List <Partida> partida = bdatos.query(new Predicate<Partida>() {
+            @Override
+            
+                public boolean match(Partida pa) {
+                
+                    for(Equipo eq : pa.getEquipo()){
+                        if( eq.GetPuntos()<pa.GetPuntos() && eq.getNombre().equals(nombre))
+                            return eq.GetPuntos()<pa.GetPuntos() && eq.getNombre().equals(nombre);
                         
                         
                     }

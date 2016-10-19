@@ -24,7 +24,9 @@ public class Main {
        //j.ObtenerEquipos();
       //j.ListTeam("barcelona");
         j.domino();
-        j.ZapatoEquipo("madrid","19/10/2016");
+       // j.EmparejarEquipo(DB4ONOMBRE);
+        //j.EmparejarJugador(DB4ONOMBRE);
+//j.ZapatoEquipo("madrid","19/10/2016");
       // j.Porcentaje_victoria_jugador("alex","19/10/2016");
        // j.ListPlayer("alex");
         //j.ListarJugador("pedro");
