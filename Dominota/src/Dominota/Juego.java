@@ -4,7 +4,6 @@
  * and open the template in the editor.
  */
 package Dominota;
-import com.db4o.ObjectSet;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
@@ -15,11 +14,6 @@ import java.io.File;
 import org.jfree.chart.plot.*;
 import java.io.*;
 import org.jfree.data.category.DefaultCategoryDataset;
-import org.jfree.data.general.DefaultPieDataset;
-import org.jfree.data.time.Day;
-import org.jfree.data.time.TimeSeriesCollection;
-import org.jfree.data.xy.XYSeries;
-import org.jfree.data.xy.XYSeriesCollection;
 /**
  *
  * @author JOSE
@@ -137,6 +131,8 @@ public class Juego {
         
             par.SetEquipo(eq);
             db.AgregarPartida(par);
+            System.out.println("GRAFICA");
+            GraficaPartidaEquipos(par);
         } 
         
         turno=0;
@@ -281,6 +277,23 @@ public class Juego {
         "Jugadores", "Puntos", dataset, PlotOrientation.VERTICAL, false,true, false);
         try {
             ChartUtilities.saveChartAsJPEG(new File("img/GrafJugInd.jpg"), chart, 500,300);
+        } catch (IOException e) {
+            System.err.println("Error creando grafico de barras.");
+        }
+    }
+    
+    //Grafica de partida actual de equipos
+    public void GraficaPartidaEquipos(Partida par){
+        List <Equipo> equipos = par.getEquipo();
+        DefaultCategoryDataset dataset = new DefaultCategoryDataset();
+        for (int i = 0; i < equipos.size(); i++) {
+            System.out.println("e: "+equipos.get(i).getNombre()+"   p:"+equipos.get(i).GetPuntos());
+            dataset.setValue(equipos.get(i).GetPuntos(), "Puntos", equipos.get(i).getNombre());
+        }
+        JFreeChart chart = ChartFactory.createBarChart("Puntos por Equipo",
+        "Equipos", "Puntos", dataset, PlotOrientation.VERTICAL, false,true, false);
+        try {
+            ChartUtilities.saveChartAsJPEG(new File("img/GrafEquipos.jpg"), chart, 500,300);
         } catch (IOException e) {
             System.err.println("Error creando grafico de barras.");
         }

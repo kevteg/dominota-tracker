@@ -24,7 +24,7 @@ public class Main {
       //j.ObtenerEquipos();
       j.domino();
       //j.ObtenerPartidaJugador();
-      j.ObtenerPartidaEquipo();
+      //j.ObtenerPartidaEquipo();
               
     }
 
