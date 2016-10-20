@@ -42,13 +42,14 @@ public class Juego {
         options,  //the titles of buttons
         options[1]); //default button title
         System.out.println(n);
-        partidaInterfaz(n + 1);
+        partidaInterfaz(n);
     }
     
     public void partidaInterfaz(int opc){
-        if(opc == 1){
+        if(opc == 0){
             this.frame.addPanelEquipo(db);
-            
+        }else if (opc == 1){
+            this.frame.addPanelIndividual(db);
         }
     }
     
@@ -170,7 +171,7 @@ public class Juego {
     }
     
     public List<Equipo> AgregarEquipo(){
-        List<Equipo> eq = new ArrayList <Equipo>(); ;
+        List<Equipo> eq = new ArrayList <Equipo>();
         String resp="si",nombre="";
         int con_j = 0 , con_e = 0 ;
         Jugador j;

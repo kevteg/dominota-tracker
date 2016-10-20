@@ -5,6 +5,8 @@
  */
 package Dominota;
 
+import java.awt.BorderLayout;
+import java.awt.Color;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.SwingUtilities;
@@ -18,7 +20,7 @@ public class equipoPanel extends javax.swing.JPanel {
     /**
      * Creates new form equipoPanel
      */
-    private Dbgestor db;
+    private final Dbgestor db;
     public equipoPanel(Dbgestor db) {
         initComponents();
         this.db = db;
@@ -53,6 +55,7 @@ public class equipoPanel extends javax.swing.JPanel {
         jPanel3 = new javax.swing.JPanel();
         maxp = new java.awt.TextField();
         jLabel9 = new javax.swing.JLabel();
+        jLabel10 = new javax.swing.JLabel();
 
         jLabel2.setText("EQUIPO UNO");
 
@@ -226,7 +229,7 @@ public class equipoPanel extends javax.swing.JPanel {
                 .addComponent(jLabel9)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(maxp, javax.swing.GroupLayout.PREFERRED_SIZE, 307, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(26, Short.MAX_VALUE))
         );
         jPanel3Layout.setVerticalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -237,6 +240,9 @@ public class equipoPanel extends javax.swing.JPanel {
                     .addComponent(jLabel9))
                 .addContainerGap())
         );
+
+        jLabel10.setFont(new java.awt.Font("Droid Sans", 0, 36)); // NOI18N
+        jLabel10.setText("DOMINOTA");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
@@ -253,19 +259,25 @@ public class equipoPanel extends javax.swing.JPanel {
                         .addGap(0, 0, Short.MAX_VALUE))
                     .addComponent(jButton1, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
+            .addGroup(layout.createSequentialGroup()
+                .addGap(148, 148, 148)
+                .addComponent(jLabel10)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(16, Short.MAX_VALUE)
+                .addComponent(jLabel10)
                 .addGap(18, 18, 18)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(13, 13, 13)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 42, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGap(20, 20, 20))
         );
     }// </editor-fold>//GEN-END:initComponents
 
@@ -291,6 +303,7 @@ public class equipoPanel extends javax.swing.JPanel {
         team1[0] = teamOne.getText();
         team2[0] = teamTwo.getText();
         String maxpoints = maxp.getText();
+        Integer number = 0;
         String message = "Debe escribir todos los campos";
         boolean accept = true;
         for (int i = 0; i < team2.length && accept; i++)
@@ -300,7 +313,7 @@ public class equipoPanel extends javax.swing.JPanel {
             }
         if(!"".equals(maxpoints)){
             try {
-                Integer number = Integer.parseInt(maxpoints);
+                number = Integer.parseInt(maxpoints);
             } catch (Exception e) {
                 message = "Los puntos máximos deben ser un número";
                 accept = false;
@@ -322,6 +335,19 @@ public class equipoPanel extends javax.swing.JPanel {
             team_2.listarEquipos();
             db.agregarEquipo(team_1);
             db.agregarEquipo(team_2);
+            Partida par = new Partida();
+            par.SetPuntos(number);
+            
+            initial frame;
+            frame = (initial)SwingUtilities.getWindowAncestor(this);
+            GamePanel panelE = new GamePanel(db, team_1, team_2, par);
+            panelE.setBackground(Color.white);
+            frame.getContentPane().removeAll();
+            frame.setLayout(new BorderLayout());
+            frame.add(panelE, BorderLayout.CENTER);        
+            frame.pack();
+            frame.setVisible(true);
+            
         }else
             JOptionPane.showMessageDialog((JFrame) SwingUtilities.getWindowAncestor(this),
                     message,
@@ -351,6 +377,7 @@ public class equipoPanel extends javax.swing.JPanel {
     Partida par = new Partida();
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButton1;
+    private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel17;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;

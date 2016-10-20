@@ -87,6 +87,8 @@
             <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jButton1ActionPerformed"/>
           </Events>
         </Component>
+        <Component class="java.awt.Choice" name="choice1">
+        </Component>
       </SubComponents>
     </Container>
   </SubComponents>

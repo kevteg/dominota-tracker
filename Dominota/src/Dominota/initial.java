@@ -36,6 +36,7 @@ public class initial extends javax.swing.JFrame {
         panelPrincipal = new javax.swing.JPanel();
         jLabel2 = new javax.swing.JLabel();
         jButton1 = new javax.swing.JButton();
+        choice1 = new java.awt.Choice();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -91,7 +92,7 @@ public class initial extends javax.swing.JFrame {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
-
+    
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
       j.dominoInterface();
     }//GEN-LAST:event_jButton1ActionPerformed
@@ -101,6 +102,17 @@ public class initial extends javax.swing.JFrame {
         this.getContentPane().removeAll();
         this.setLayout(new BorderLayout());
         this.add(panelE, BorderLayout.CENTER);        
+        pack();
+        /*getContentPane().validate();
+        getContentPane().repaint();*/
+        setVisible(true);
+    }  
+     public void addPanelIndividual(Dbgestor db) { 
+        panelIndividual panelI = new panelIndividual(db);
+        panelI.setBackground(Color.white);
+        this.getContentPane().removeAll();
+        this.setLayout(new BorderLayout());
+        this.add(panelI, BorderLayout.CENTER);        
         pack();
         /*getContentPane().validate();
         getContentPane().repaint();*/
@@ -116,9 +128,18 @@ public class initial extends javax.swing.JFrame {
             }
         });
     }
+    public void goBack(){
+        System.out.println("Menú");
+        this.getContentPane().removeAll();
+        this.setLayout(new BorderLayout());
+        this.add(panelPrincipal, BorderLayout.CENTER);        
+        pack();
+        setVisible(true);
+    }
     private Juego j = new Juego(this);
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private java.awt.Choice choice1;
     private javax.swing.JButton jButton1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JPanel panelPrincipal;
