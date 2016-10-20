@@ -74,6 +74,7 @@ public class Equipo {
         System.out.println("Jugadores: ");  
         for (Jugador ju : jugador) {
         System.out.println(ju.getNombre());
+            System.out.println("Puntos " + this.puntos);
            
       
         }
