@@ -8,6 +8,7 @@ package Dominota;
 import com.db4o.ObjectSet;
 import com.db4o.query.Predicate;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Scanner;
 
@@ -530,7 +531,55 @@ public class Juego {
             }
         }
         // db.DbClose();
-
     }
+
+    public void Top3Puntos() {
+
+        List<Jugador> j = db.GetBddatos().query(Jugador.class);
+
+        String[] nombres = new String[9000];
+        int[] puntos = new int[9000];
+        int tam = 0;
+
+        for (Jugador ju : j) {
+            nombres[tam] = ju.getNombre();
+            puntos[tam] = ju.GetPuntos();
+            //System.out.println(nombres[tam] + " " + puntos[tam]);
+            //System.out.println("Nombre del jugador: " + ju.getNombre());
+            //System.out.println("Puntos: " + ju.GetPuntos());
+            tam++;
+        }
+
+        //---------------------------Ordena-------------------------------------
+        int k;
+        boolean flag = true;   // set flag to true to begin first pass
+        int tempp;   //holding variable
+        String tempn;
+
+        while (flag) {
+            flag = false;    //set flag to false awaiting a possible swap
+            for (k = 0; k < tam - 1; k++) {
+                if (puntos[k] < puntos[k + 1]) {
+
+                    tempp = puntos[k];
+                    tempn = nombres[k];
+
+                    puntos[k] = puntos[k + 1];
+                    nombres[k] = nombres[k + 1];
+
+                    puntos[k + 1] = tempp;
+                    nombres[k + 1] = tempn;
+                    flag = true;              //shows a swap occurred  
+                }//Fin if
+            }//Fin for
+        }// fin bandera
+
+        for (int i = 0; i < 3; i++) {
+            System.out.println(nombres[i] + " " + puntos[i]);
+        }
+
+    }//Fin top3
+
+   
 
 }
