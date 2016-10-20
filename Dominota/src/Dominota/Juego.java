@@ -209,7 +209,6 @@ public class Juego {
 
     }
 
-    //obtener todos los equipos
     public void ObtenerEquipos() {
         List<Equipo> result = db.GetBddatos().query(Equipo.class);
         for (Equipo e : result) {
@@ -218,7 +217,6 @@ public class Juego {
         }
         // db.DbClose();
     }
-    //Uobtener todos los jugadores 
 
     public void ObtenerJugadores() {
         List<Jugador> j = db.GetBddatos().query(Jugador.class);
@@ -229,7 +227,6 @@ public class Juego {
         // db.DbClose();
     }
 
-    //obtener todas las partidas por jugador
     public void ObtenerPartidaJugador() {
         int contador = 0;
         List<Partida> p = db.GetBddatos().query(Partida.class);
@@ -251,7 +248,6 @@ public class Juego {
 
     }
 
-    //comprobar consulta partidas ganadas
     public void ListPlayer(String nombre) {
 
         int partidas_ganadas = 0;
@@ -270,7 +266,6 @@ public class Juego {
         // db.DbClose();
     }
 
-    //comprobar la consulta partidas ganadas
     public void ListTeam(String nombre) {
 
         int partidas_ganadas = 0;
@@ -289,7 +284,6 @@ public class Juego {
         // db.DbClose();
     }
 
-    //numero de veces que un jugador ha ganado
     public void ListarJugador(String name) {
         List<Partida> jugador = db.PartidaJugador(name);
         int con = 0;
@@ -301,7 +295,6 @@ public class Juego {
         //   db.DbClose();
     }
 
-    //numero de veces que un equipo ha ganado
     public void ListarEquipo(String name) {
 
         List<Partida> equipo = db.PartidaEquipo(name);
@@ -310,7 +303,6 @@ public class Juego {
         //   db.DbClose();
     }
 
-    // Equipos en los que ha estado un determinado jugador
     public void ListarJugadorPorEquipo(String nombre) {
         List<Equipo> equipo = db.JugadorPorEquipo(nombre);
         System.out.println(nombre + " ha estado en los siguientes equipos: ");
@@ -321,7 +313,6 @@ public class Juego {
 
     }
 
-    //cantidad de veces que jugador obtuvo cero puntos     
     public void ZapatoJugador(String name, String fecha) {
 
         List<Partida> zapato = db.JugadorZapato(name, fecha);
@@ -330,7 +321,6 @@ public class Juego {
         //   db.DbClose();
     }
 
-    //cantidad de veces que un equipo obtuvo cero puntos     
     public void ZapatoEquipo(String name, String fecha) {
 
         List<Partida> zapato = db.EquipoZapato(name, fecha);
@@ -339,7 +329,6 @@ public class Juego {
         //   db.DbClose();
     }
 
-    //comprobar algnas consultas
     public void listar_fecha() {
         List<Partida> p = db.GetBddatos().query(Partida.class);
         for (Partida pa : p) {
@@ -355,14 +344,12 @@ public class Juego {
 
     }
 
-    //cantidad de veces que gano el equipo en una fecha
     public int ListarEquipoGanadas(String name, String fecha) {
         List<Partida> equipo = db.PartidaEquipoGanadas(name, fecha);
         System.out.println(name + " ha ganado " + equipo.size() + " partidas");
         return equipo.size();
         //   db.DbClose();
     }
-    //cantidad de veces que perdio el equipo en una fecha
 
     public int ListarEquipoPerdidas(String name, String fecha) {
         List<Partida> equipo = db.PartidaEquipoPerdidas(name, fecha);
@@ -371,14 +358,12 @@ public class Juego {
         //   db.DbClose();
     }
 
-    //cantidad de veces que gano el jguador en una fecha
     public int ListarJugadorGanadas(String name, String fecha) {
         List<Partida> jugador = db.PartidaJugadorGanadas(name, fecha);
         System.out.println(name + " ha ganado " + jugador.size() + " partidas");
         return jugador.size();
         //   db.DbClose();
     }
-    //cantidad de veces que perdio el jugador en una fecha
 
     public int ListarJugadorPerdidas(String name, String fecha) {
         List<Partida> jugador = db.PartidaJugadorPerdidas(name, fecha);
@@ -386,7 +371,6 @@ public class Juego {
         return jugador.size();
         //   db.DbClose();
     }
-    //metodo para obtener el porcentaje del equipo
 
     public void Porcentaje_victoria_equipo(String name, String fecha) {
         float ganadas = 0, perdidas = 0;
@@ -397,7 +381,6 @@ public class Juego {
         System.out.println(name + " ha ganado el " + total + " porciento de sus partidas");
         //   db.DbClose();
     }
-    // metodo para obtener el porcentaje del jugador
 
     public void Porcentaje_victoria_jugador(String name, String fecha) {
         float ganadas = 0, perdidas = 0;
@@ -409,7 +392,6 @@ public class Juego {
         //   db.DbClose();
     }
 
-    //Parte de las funcionalidades
     public void EmparejarJugadoresOponentes(float porcentaje, String nombre) {
         List<Jugador> jugador = db.GetBddatos().query(Jugador.class);
         List<Jugador> oponente = new ArrayList<Jugador>();
@@ -513,7 +495,6 @@ public class Juego {
         db.DbClose();
     }
 
-    //obtener todas las partidas por equipo
     public void ObtenerPartidaEquipo() {
         int contador = 0;
         List<Partida> p = db.GetBddatos().query(Partida.class);
@@ -580,6 +561,59 @@ public class Juego {
 
     }//Fin top3
 
-   
+    public void TopMejoresJugadores() {
+        List<Jugador> jugador = db.GetBddatos().query(Jugador.class);
+        List<Jugador> oponente = new ArrayList<Jugador>();
+        List<Float> por = new ArrayList<Float>();
+        List<Partida> partida = db.GetBddatos().query(Partida.class);
+        float ganadas = 0, perdidas = 0, total = 0;
+
+        for (Jugador ju : jugador) {
+
+            for (Partida pa : partida) {
+                for (Jugador jug : pa.getJugador()) {
+                    if (ju.getNombre().equals(jug.getNombre()) && jug.GetPuntos() >= pa.GetPuntos()) {
+                        ganadas++;
+                    }
+                    if (ju.getNombre().equals(jug.getNombre()) && jug.GetPuntos() < pa.GetPuntos()) {
+                        perdidas++;
+                    }
+                }
+            }
+
+            total = (ganadas / (ganadas + perdidas)) * 100;
+            ju.SetPuntos((int) total);
+
+            oponente.add(ju);
+            por.add(total);
+
+        }
+
+        Collections.sort(por, Collections.reverseOrder());
+
+        Jugador[] player = new Jugador[oponente.size()];
+        int contador = 0;
+        for (Jugador jug : oponente) {
+            player[contador] = jug;
+            contador++;
+        }
+
+        for (int i = 0; i < player.length - 1; i++) {
+            for (int j = 0; j < player.length - 1; j++) {
+                if (player[j].GetPuntos() < player[j + 1].GetPuntos()) {
+                    Jugador tmp = player[j + 1];
+                    player[j + 1] = player[j];
+                    player[j] = tmp;
+                }
+            }
+        }
+
+        if (player.length >= 5) {
+            for (int i = 0; i < 5; i++) {
+                System.out.print(player[i].getNombre() + " " + player[i].GetPuntos() + "\n");
+            }
+        }
+
+    }
 
 }

@@ -36,6 +36,7 @@ public class Main {
         //j.ObtenerPartidaJugador();
         //j.ObtenerPartidaEquipo();
         //j.Top3Puntos();
+        j.TopMejoresJugadores();
         j.Cerrar_Sesion();
 
     }
