@@ -21,9 +21,11 @@ public class equipoPanel extends javax.swing.JPanel {
      * Creates new form equipoPanel
      */
     private final Dbgestor db;
-    public equipoPanel(Dbgestor db) {
+    private Juego j;
+    public equipoPanel(Dbgestor db, Juego j) {
         initComponents();
         this.db = db;
+        this.j = j;
     }
 
     /**
@@ -340,7 +342,7 @@ public class equipoPanel extends javax.swing.JPanel {
             
             initial frame;
             frame = (initial)SwingUtilities.getWindowAncestor(this);
-            GamePanel panelE = new GamePanel(db, team_1, team_2, par);
+            GamePanel panelE = new GamePanel(db, team_1, team_2, par, j);
             panelE.setBackground(Color.white);
             frame.getContentPane().removeAll();
             frame.setLayout(new BorderLayout());

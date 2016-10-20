@@ -5,6 +5,9 @@
  */
 package Dominota;
 
+import java.text.DateFormat;
+import java.util.Date;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -34,27 +37,35 @@ public class GamePanel extends javax.swing.JPanel {
     private  List<Jugador> ju;
     private int turno = 0;
     private final int modo;
-    public GamePanel(Dbgestor db, Equipo team_1, Equipo team_2, Partida par) {
+    private Juego j ;
+    public GamePanel(Dbgestor db, Equipo team_1, Equipo team_2, Partida par, Juego j) {
         initComponents();
+        DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
+        Date date = new Date();
+        //System.out.println(dateFormat.format(date));
+        this.j = j;
         this.db = db;
         this.team_1 = team_1;
         this.team_2 = team_2;
         this.par = par;
+        par.SetFecha(dateFormat.format(date));
         modo = EQUIPO;
         this.lpuntos.setText(String.valueOf(par.GetPuntos()));
         DefaultTableModel model = (DefaultTableModel)this.teaminfo.getModel();
         model.addColumn(team_1.getNombre());
         model.addColumn(team_2.getNombre());
-        //this.teaminfo.getColumnModel().getColumn(TEAM1).setHeaderValue(team_1.getNombre());
-        //this.teaminfo.getColumnModel().getColumn(TEAM2).setHeaderValue(team_2.getNombre());
         this.addTeam3.setVisible(false);
         this.addTeam4.setVisible(false);
     }
-     public GamePanel(Dbgestor db, List<Jugador> ju, Partida par) {
+     public GamePanel(Dbgestor db, List<Jugador> ju, Partida par, Juego j) {
         initComponents();
+        DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
+        Date date = new Date();
+        this.j = j;
         this.db = db;
         this.ju = ju;
         this.par = par;
+        par.SetFecha(dateFormat.format(date));
         modo = INDIVIDUAL;
         this.lpuntos.setText(String.valueOf(par.GetPuntos()));
         DefaultTableModel model = (DefaultTableModel)this.teaminfo.getModel();
@@ -66,8 +77,6 @@ public class GamePanel extends javax.swing.JPanel {
         }else if(ju.size() == 3){
             this.addTeam4.setVisible(false);
         }
-        //this.teaminfo.getColumnModel().getColumn(TEAM1).setHeaderValue(team_1.getNombre());
-        //this.teaminfo.getColumnModel().getColumn(TEAM2).setHeaderValue(team_2.getNombre());
     }
 
     /**
@@ -322,7 +331,29 @@ public class GamePanel extends javax.swing.JPanel {
                        :(singleZero());
         String icon = shoe?"shoe.png":"ok.png";
         if(!message.equals("")){
-            List<Equipo> eq = new ArrayList <Equipo>();
+            
+            if(modo == EQUIPO){
+                //j = new Juego(null);
+                List<Equipo> eq = new ArrayList <Equipo>();
+                eq.add(team_1);
+                eq.add(team_2);
+                par.SetEquipo(eq);
+                db.AgregarPartida(par);
+                db.agregarEquipo(team_1);
+                db.agregarEquipo(team_2);
+                j.GraficaPartidaEquipos(par);
+            }else{     
+                //j = new Juego(null);
+                par.SetJugador(ju);
+                db.AgregarPartida(par);
+                
+                for(Jugador jugador : ju)
+                    db.AgregarJugador(jugador);
+                    
+                j.GraficaPartidaIndividual(par);
+            }
+                
+            
             initial ventana = (initial) SwingUtilities.getWindowAncestor(this);
             System.out.println(message);
             //ImageIcon icon = new ImageIcon("shoe.ico"));
@@ -331,10 +362,14 @@ public class GamePanel extends javax.swing.JPanel {
                     "Ganador",
                     JOptionPane.INFORMATION_MESSAGE,
                     new ImageIcon(icon));
-            eq.add(team_1);
-            eq.add(team_2);
-            par.SetEquipo(eq);
-            db.AgregarPartida(par);
+            
+            ImageIcon gra = new ImageIcon("img/gra.jpg");
+            gra.getImage().flush();
+            JOptionPane.showMessageDialog(ventana,
+                    "",
+                    "Ganador",
+                    JOptionPane.INFORMATION_MESSAGE,
+                    gra);
             turno = 0;
             ventana.goBack();
         }

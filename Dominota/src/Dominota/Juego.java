@@ -15,6 +15,7 @@ import org.jfree.chart.JFreeChart;
 import java.io.File;
 import org.jfree.chart.plot.*;
 import java.io.*;
+import java.util.Collections;
 import javax.swing.JOptionPane;
 import org.jfree.data.category.DefaultCategoryDataset;
 /**
@@ -24,10 +25,13 @@ import org.jfree.data.category.DefaultCategoryDataset;
 public class Juego {
     
     private Dbgestor db;
-    private int con;
-    public Juego(){
-        db = new Dbgestor();
-        con = -1 ;
+    private initial frame;
+    
+    public Juego(initial frame){
+        if(frame != null){
+            db = new Dbgestor();
+            this.frame = frame;
+        }
     }
     
     
@@ -257,25 +261,25 @@ public class Juego {
     }
     
     //obtener todas las partidas por jugador
-    public void ObtenerPartidaJugador () {
+    public String ObtenerPartidaJugador () {
         int contador = 0;
+        String info = "";
         List <Partida> p = db.GetBddatos().query(Partida.class);
         for (Partida pa : p) {
-            System.out.println("Puntos de partida: " + pa.GetPuntos());
-            System.out.println("Fecha "+ pa.GetFecha());
+            if(pa.getJugador().size() > 0)
+                info += "-------------Puntos de partida: " + pa.GetPuntos() + " (" + pa.GetFecha()+ ")" + "-------------\n";
             for(Jugador j : pa.getJugador()){
-                System.out.println("Jugador: " + j.getNombre());
-                System.out.println("Puntos Totales: " + j.GetPuntos());
+                info += ">Jugador: " + j.getNombre() + "\n";
+                info += "Puntos Totales: " + j.GetPuntos() + "\n";
                 for(int point : j.GetMano()){
-                   // System.out.println("Puntos en mano: " + point);
-                    //System.out.println("Turno: " + j.GetTurno().get(contador));
+                    info += "Puntos en mano: " + point + "\n";
+                    info += "Turno: " + j.GetTurno().get(contador) + "\n";
                     contador++;
                 }
                 contador = 0;
                 }
            }
-        // db.DbClose();
-    
+      return info;
     }
     
     //comprobar consulta partidas ganadas
@@ -318,56 +322,35 @@ public class Juego {
       
       //numero de veces que un jugador ha ganado
     
-    public void ListarJugador(String name){
+    public int ListarJugador(String name){
         List <Partida> jugador = db.PartidaJugador(name);
         int con = 0;
         for (Partida pa : jugador){
             con++;
         }
-        
-        System.out.println(name + " ha ganado " + con + " partidas");
+        return con;
      //   db.DbClose();
     }
     //numero de veces que un equipo ha ganado
-    public void ListarEquipo(String name){
-        
+    public int ListarEquipo(String name){
         List <Partida> equipo = db.PartidaEquipo(name);
-        System.out.println(name + " ha ganado " + equipo.size() + " partidas");
-        
+        return equipo.size();
         //   db.DbClose();
     }
     //cantidad de veces que jugador obtuvo cero puntos     
-    public void ZapatoJugador(String name,String fecha){
-        
+    public int ZapatoJugador(String name,String fecha){
         List <Partida> zapato = db.JugadorZapato(name, fecha);
         System.out.println(name + " obtuvo " + zapato.size() + " zapatos en la partidas");
-        
-        //   db.DbClose();
+        return zapato.size();
     }
     
        //cantidad de veces que un equipo obtuvo cero puntos     
-    public void ZapatoEquipo(String name,String fecha){
-        
+    public int ZapatoEquipo(String name,String fecha){
         List <Partida> zapato = db.EquipoZapato(name, fecha);
         System.out.println(name + " obtuvo " + zapato.size() + " zapatos en la partidas");
-        
-        //   db.DbClose();
+        return zapato.size();
     }
-    //comprobar algnas consultas
-   public void listar_fecha(){
-         List <Partida> p = db.GetBddatos().query(Partida.class);
-            for(Partida pa : p){
-                System.out.println(pa.GetFecha());
-              if(pa.GetFecha().equals("19/10/2016")){
-                  
-                  for(Jugador ju : pa.getJugador()){
-                      System.out.println(ju.getNombre()+  " " + ju.GetPuntos());
-                  }
-              }
-// System.out.println(pa.GetFecha());
-            }
-        
-    }
+
    
    //cantidad de veces que gano el equipo en una fecha
     public int ListarEquipoGanadas(String name,String fecha){
@@ -398,30 +381,24 @@ public class Juego {
         //   db.DbClose();
     }  
        //metodo para obtener el porcentaje del equipo
-    public void Porcentaje_victoria_equipo(String name,String fecha){
+    public float Porcentaje_victoria_equipo(String name,String fecha){
         float ganadas = 0,perdidas = 0;
         float total = 0;
         ganadas = ListarEquipoGanadas(name,fecha);
         perdidas = ListarEquipoPerdidas(name,fecha);
         total = (float)((ganadas/(ganadas + perdidas))*100);
-        
-       
-        
         System.out.println(name + " ha ganado el " + total + " porciento de sus partidas");
-     //   db.DbClose();
+        return total;
     }
         // metodo para obtener el porcentaje del jugador
-        public void Porcentaje_victoria_jugador(String name,String fecha){
+    public float Porcentaje_victoria_jugador(String name,String fecha){
         float ganadas = 0,perdidas = 0;
         float total = 0;
         ganadas = ListarJugadorGanadas(name,fecha);
-        perdidas = ListarJugadorPerdidas(name,fecha);
+        perdidas = ListarJugadorPerdidas(name,fecha);;
         total = (float)((ganadas/(ganadas + perdidas))*100);
-        
-       
-        
         System.out.println(name + " ha ganado el " + total + " porciento de sus partidas");
-     //   db.DbClose();
+        return total;
     }
     
     
@@ -429,27 +406,28 @@ public class Juego {
         db.DbClose();
     }
     
-
-    
       //obtener todas las partidas por equipo
-    public void ObtenerPartidaEquipo () {
+    public String ObtenerPartidaEquipo () {
         int contador = 0;
+        String info = "";
         List <Partida> p = db.GetBddatos().query(Partida.class);
         for (Partida pa : p) {
-            System.out.println("Puntos de partida: " + pa.GetPuntos());
+            if(pa.getEquipo().size() > 0)
+                info += "-------------Puntos de partida: " + pa.GetPuntos() + " (" + pa.GetFecha()+ ")" + "-------------\n";
             for(Equipo eq : pa.getEquipo()){
-                System.out.println("Equipo: " + eq.getNombre());
-                System.out.println("Puntos Totales: " + eq.GetPuntos());
-                for(int point : eq.getManos()){
-                    System.out.println("Puntos en mano: " + point);
-                    System.out.println("Turno: " + eq.GetTurno().get(contador));
-                    contador++;
+                if(eq!= null){
+                    info += ">Equipo: " + eq.getNombre() + "\n";
+                    info += "Puntos Totales: " + eq.GetPuntos() + "\n";
+                    for(int point : eq.getManos()){
+                        info += "Puntos en mano: " + point + "\n";
+                        info += "Turno: " + eq.GetTurno().get(contador) + "\n";
+                        contador++;
+                    }
+                    contador = 0;
                 }
-                contador = 0;
                 }
            }
-        // db.DbClose();
-    
+        return info;
     }
     
     //Grafica de partida actual para jugadores individuales
@@ -463,7 +441,7 @@ public class Juego {
       JFreeChart chart = ChartFactory.createBarChart("Puntos por Jugador",
         "Jugadores", "Puntos", dataset, PlotOrientation.VERTICAL, false,true, false);
         try {
-            ChartUtilities.saveChartAsJPEG(new File("img/GrafJugInd.jpg"), chart, 500,300);
+            ChartUtilities.saveChartAsJPEG(new File("img/gra.jpg"), chart, 500,300);
         } catch (IOException e) {
             System.err.println("Error creando grafico de barras.");
         }
@@ -480,23 +458,260 @@ public class Juego {
         JFreeChart chart = ChartFactory.createBarChart("Puntos por Equipo",
         "Equipos", "Puntos", dataset, PlotOrientation.VERTICAL, false,true, false);
         try {
-            ChartUtilities.saveChartAsJPEG(new File("img/GrafEquipos.jpg"), chart, 500,300);
+            ChartUtilities.saveChartAsJPEG(new File("img/gra.jpg"), chart, 500,300);
         } catch (IOException e) {
             System.err.println("Error creando grafico de barras.");
         }
     }
     
-    public void Estadisticas () {
+    public Integer[] Estadisticas () {
         //Numero de jugadores
+        Integer[] info = new Integer[3];
         List <Jugador> j = db.GetBddatos().query(Jugador.class);
         System.out.println("Número de jugadores: "+j.size());
+        info[0] = j.size();
         //Numero de equipos
         List <Equipo> result = db.GetBddatos().query(Equipo.class);
         System.out.println("Número de equipos: "+result.size());
+        info[1] = result.size();
         //Partidas jugadas
         List <Partida> p = db.GetBddatos().query(Partida.class);
         System.out.println("Partidas jugadas: "+p.size());
-        
+        info[2] = p.size();
+        return info;
+    }
+
+    
+    
+      public String EmparejarJugadoresOponentes(float porcentaje, String nombre) {
+        List<Jugador> jugador = db.GetBddatos().query(Jugador.class);
+        List<Jugador> oponente = new ArrayList<Jugador>();
+        List<Float> por = new ArrayList<Float>();
+        List<Partida> partida = db.GetBddatos().query(Partida.class);
+        float ganadas = 0, perdidas = 0, total = 0;
+        ganadas = perdidas = total = 0;
+        String message = "";
+        for (Jugador ju : jugador) {
+            if (ju.getNombre().equals(nombre) == false) {
+                for (Partida pa : partida) {
+                    for (Jugador jug : pa.getJugador()) {
+                        if (ju.getNombre().equals(jug.getNombre()) && jug.GetPuntos() >= pa.GetPuntos()) {
+                            ganadas++;
+                        }
+                        if (ju.getNombre().equals(jug.getNombre()) && jug.GetPuntos() < pa.GetPuntos()) {
+                            perdidas++;
+                        }
+                    }
+                }
+
+                total = (ganadas / (ganadas + perdidas)) * 100;
+
+                if (porcentaje >= total - 10 && porcentaje <= total + 10) {
+                    oponente.add(ju);
+                    por.add(total);
+                }
+            }
+        }
+
+        message += "El jugador " + nombre + "con " + porcentaje + " % " + "se empareja mejor con: \n";
+        int contador = 0;
+        for (Jugador opo : oponente) {
+            message += opo.getNombre() + " " + por.get(contador) + "\n";
+            contador++;
+        }
+        return message;
+    }
+
+    public String EmparejarEquiposOponentes(float porcentaje, String nombre) {
+
+        List<Equipo> jugador = db.GetBddatos().query(Equipo.class);
+        List<Equipo> oponente = new ArrayList<Equipo>();
+        List<Float> por = new ArrayList<Float>();
+        List<Partida> partida = db.GetBddatos().query(Partida.class);
+        float ganadas = 0, perdidas = 0, total = 0;
+        String message = "";
+        for (Equipo ju : jugador) {
+            ganadas = perdidas = total = 0;
+            if (ju.getNombre().equals(nombre) == false) {
+                for (Partida pa : partida) {
+                    for (Equipo jug : pa.getEquipo()) {
+                        if (ju.getNombre().equals(jug.getNombre()) && jug.GetPuntos() >= pa.GetPuntos()) {
+                            ganadas++;
+                        }
+                        if (ju.getNombre().equals(jug.getNombre()) && jug.GetPuntos() < pa.GetPuntos()) {
+                            perdidas++;
+                        }
+                    }
+                }
+
+                total = (ganadas / (ganadas + perdidas)) * 100;
+                System.out.println("Jugador " + ju.getNombre() + " " + total);
+                if (porcentaje >= total - 10 && porcentaje <= total + 10) {
+                    oponente.add(ju);
+                    por.add(total);
+                }
+
+            }
+        }
+
+        message += "El equipo " + nombre + " con " + porcentaje + " % " + "se empareja mejor con: \n";
+        System.out.println("--");
+        int contador = 0;
+        for (Equipo opo : oponente) {
+            message += opo.getNombre() + " " + por.get(contador) + "\n";
+            System.out.println(opo.getNombre() + " " + por.get(contador));
+            contador++;
+        }
+        return message;
+    }
+
+    public String EmparejarJugador(String nombre) {
+        String message = "";
+        List<Partida> ganadas = db.PartidaJugador(nombre);
+        List<Partida> perdidas = db.PartidaJugadorPerdidas(nombre);
+        float ganar = ganadas.size();
+        float perder = perdidas.size();
+        float porcentaje_victoria = (ganar / (ganar + perder)) * 100;
+        message = this.EmparejarJugadoresOponentes(porcentaje_victoria, nombre);
+        return message;
+    }
+
+    public String EmparejarEquipo(String nombre) {
+        String message = "";
+        List<Partida> ganadas = db.PartidaEquipo(nombre);
+        List<Partida> perdidas = db.PartidaEquipoPerdidas(nombre);
+        float ganar = ganadas.size();
+        float perder = perdidas.size();
+        float porcentaje_victoria = (ganar / (ganar + perder)) * 100;
+        message = this.EmparejarEquiposOponentes(porcentaje_victoria, nombre);
+        return message;
+    }
+
+    public String Top3Puntos() {
+
+        List<Jugador> j = db.GetBddatos().query(Jugador.class);
+        String info = "";
+        String[] nombres = new String[9000];
+        int[] puntos = new int[9000];
+        int tam = 0;
+
+        for (Jugador ju : j) {
+            nombres[tam] = ju.getNombre();
+            puntos[tam] = ju.GetPuntos();
+            //System.out.println(nombres[tam] + " " + puntos[tam]);
+            //System.out.println("Nombre del jugador: " + ju.getNombre());
+            //System.out.println("Puntos: " + ju.GetPuntos());
+            tam++;
+        }
+
+        //---------------------------Ordena-------------------------------------
+        int k;
+        boolean flag = true;   // set flag to true to begin first pass
+        int tempp;   //holding variable
+        String tempn;
+
+        while (flag) {
+            flag = false;    //set flag to false awaiting a possible swap
+            for (k = 0; k < tam - 1; k++) {
+                if (puntos[k] < puntos[k + 1]) {
+
+                    tempp = puntos[k];
+                    tempn = nombres[k];
+
+                    puntos[k] = puntos[k + 1];
+                    nombres[k] = nombres[k + 1];
+
+                    puntos[k + 1] = tempp;
+                    nombres[k + 1] = tempn;
+                    flag = true;              //shows a swap occurred  
+                }//Fin if
+            }//Fin for
+        }// fin bandera
+        info += "Mejores jugadores: \n";
+        for (int i = 0; i < 3; i++)
+           info += nombres[i] + ": " + puntos[i] + "\n";
+        return info;
+    }//Fin top3
+
+    public void TopMejoresJugadores() {
+        List<Jugador> jugador = db.GetBddatos().query(Jugador.class);
+        List<Jugador> oponente = new ArrayList<Jugador>();
+        List<Float> por = new ArrayList<Float>();
+        List<Partida> partida = db.GetBddatos().query(Partida.class);
+        float ganadas = 0, perdidas = 0, total = 0;
+
+        for (Jugador ju : jugador) {
+
+            for (Partida pa : partida) {
+                for (Jugador jug : pa.getJugador()) {
+                    if (ju.getNombre().equals(jug.getNombre()) && jug.GetPuntos() >= pa.GetPuntos()) {
+                        ganadas++;
+                    }
+                    if (ju.getNombre().equals(jug.getNombre()) && jug.GetPuntos() < pa.GetPuntos()) {
+                        perdidas++;
+                    }
+                }
+            }
+
+            total = (ganadas / (ganadas + perdidas)) * 100;
+            ju.SetPuntos((int) total);
+
+            oponente.add(ju);
+            por.add(total);
+
+        }
+
+        Collections.sort(por, Collections.reverseOrder());
+
+        Jugador[] player = new Jugador[oponente.size()];
+        int contador = 0;
+        for (Jugador jug : oponente) {
+            player[contador] = jug;
+            contador++;
+        }
+
+        for (int i = 0; i < player.length - 1; i++) {
+            for (int j = 0; j < player.length - 1; j++) {
+                if (player[j].GetPuntos() < player[j + 1].GetPuntos()) {
+                    Jugador tmp = player[j + 1];
+                    player[j + 1] = player[j];
+                    player[j] = tmp;
+                }
+            }
+        }
+
+        if (player.length >= 5) {
+            for (int i = 0; i < 5; i++) {
+                System.out.print(player[i].getNombre() + " " + player[i].GetPuntos() + "\n");
+            }
+        }
+
+    }
+    public void cargar_partida(){
+        List <Partida> p = db.GetBddatos().query(Partida.class);
+        List <Jugador> jug = new ArrayList<Jugador>();
+        List <Equipo> equ = new ArrayList<Equipo>();
+        int cargar = p.size();
+        int puntos = 0;
+        String fecha="";
+        if (p.get(cargar).getEquipo().isEmpty()==true){
+        //jugador
+            //puntos partidas
+            puntos=p.get(cargar).GetPuntos();
+            fecha = p.get(cargar).GetFecha();
+            for (Jugador j : p.get(cargar).getJugador())
+                jug.add(j);
+            
+            
+        }else{
+            puntos=p.get(cargar).GetPuntos();
+            fecha = p.get(cargar).GetFecha();
+            for (Equipo j : p.get(cargar).getEquipo())
+                equ.add(j);
+            //equipo
+        }
+        System.out.println(jug);
+    
     }
 
 }

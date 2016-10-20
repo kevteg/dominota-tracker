@@ -10,22 +10,23 @@ import java.util.List;
 public class Main {
    
 
-    final static String DB4ONOMBRE = "C:\\Users\\JOSE\\Downloads\\Dominota\basededatos.db4o";
+    final static String DB4ONOMBRE = "basededatos.db4o";
     static ObjectContainer bdatos;
     static InputStreamReader isr = new InputStreamReader(System.in);
     static BufferedReader leer = new BufferedReader(isr);
 
     public static void main(String[] args) throws IOException {
-         
-      Juego j = new Juego ();
+       initial dinterface = new initial();
+      dinterface.setVisible(true);
+      //Juego j = new Juego (db);
       //j.ObtenerJugadores();
-      j.Estadisticas();
+      //j.Estadisticas();
       //j.AgregarJugador();
       //j.AgregarEquipo();
        //j.ObtenerEquipos();
       //j.ListTeam("barcelona");
-        j.domino();
-        j.ZapatoEquipo("madrid","19/10/2016");
+        //j.domino();
+        //j.ZapatoEquipo("madrid","19/10/2016");
       // j.Porcentaje_victoria_jugador("alex","19/10/2016");
        // j.ListPlayer("alex");
         //j.ListarJugador("pedro");
@@ -35,7 +36,7 @@ public class Main {
 //j.ObtenerJugadores();
      //j.ObtenerPartidaJugador();
       //j.ObtenerPartidaEquipo();
-      j.Cerrar_Sesion();
+      //j.Cerrar_Sesion();
               
     }
 

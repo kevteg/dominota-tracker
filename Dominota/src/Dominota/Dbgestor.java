@@ -21,7 +21,7 @@ import java.util.List;
  */
 public class Dbgestor {
     private ObjectContainer bdatos;
-    final static String DB4ONOMBRE = "C:\\Users\\Principal\\Desktop\\Dominota\\basededatos.db4o";
+    final static String DB4ONOMBRE = "basededatos.db4o";
     static InputStreamReader isr = new InputStreamReader(System.in);
     static BufferedReader leer = new BufferedReader(isr);
     
@@ -29,6 +29,7 @@ public class Dbgestor {
       bdatos = null ;
       iniciarBD();
     }
+
     
     public void iniciarBD() {
         File archivo = new File(DB4ONOMBRE);
@@ -65,6 +66,28 @@ public class Dbgestor {
     }
     
     
+        public List<Equipo> JugadorPorEquipo(String name){
+        
+        final String nombre = name; 
+        List <Equipo> equipo = bdatos.query(new Predicate<Equipo>() {
+        @Override
+            
+       public boolean match(Equipo eq) {
+                
+            for(Jugador jugador : eq.getJugador()){
+                if (jugador.getNombre().equals(nombre))
+                    return jugador.getNombre().equals(nombre);
+                    
+                
+            }
+           return eq.GetPuntos()==-1;
+       }
+        });
+            return equipo;
+                
+    }
+                
+        
     public List<Partida> PartidaJugador(String name){
         
         final String nombre = name; 
@@ -83,7 +106,29 @@ public class Dbgestor {
            
          });
             return partida;
-        }
+    }
+    
+     public List<Partida> PartidaJugadorPerdidas(String name){
+        
+        final String nombre = name; 
+        List <Partida> partida = bdatos.query(new Predicate<Partida>() {
+        @Override
+            
+       public boolean match(Partida pa) {
+                
+            for(Jugador ju : pa.getJugador()){
+                if(ju.GetPuntos()<pa.GetPuntos() && ju.getNombre().equals(nombre))
+                    return ju.GetPuntos()<pa.GetPuntos() && ju.getNombre().equals(nombre);
+                        
+                }
+                return pa.GetPuntos()==0;
+            }
+           
+         });
+            return partida;
+    }
+    
+    
       public List<Partida> PartidaJugadorGanadas(String name,String fecha){
         
             final String nombre = name; 
@@ -177,6 +222,28 @@ public class Dbgestor {
             return partida;
         }
         
+        public List<Partida> PartidaEquipoPerdidas(String name){
+        
+            final String nombre = name; 
+            List <Partida> partida = bdatos.query(new Predicate<Partida>() {
+            @Override
+            
+                public boolean match(Partida pa) {
+                
+                    for(Equipo eq : pa.getEquipo()){
+                        if( eq.GetPuntos()<pa.GetPuntos() && eq.getNombre().equals(nombre))
+                            return eq.GetPuntos()<pa.GetPuntos() && eq.getNombre().equals(nombre);
+                        
+                        
+                    }
+                    System.out.println("Nada");
+                    return pa.GetPuntos()==0;
+            }
+           
+         });
+            return partida;
+        }
+        
         public List<Partida> PartidaEquipoGanadas(String name,String fecha){
         
             final String nombre = name; 
@@ -245,6 +312,9 @@ public class Dbgestor {
         }
 
     
+
+    
+
 
     
 }
