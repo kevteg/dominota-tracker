@@ -342,11 +342,11 @@ public class equipoPanel extends javax.swing.JPanel {
             
             initial frame;
             frame = (initial)SwingUtilities.getWindowAncestor(this);
-            GamePanel panelE = new GamePanel(db, team_1, team_2, par, j);
-            panelE.setBackground(Color.white);
+            panelG = new GamePanel(db, team_1, team_2, par, j);
+            panelG.setBackground(Color.white);
             frame.getContentPane().removeAll();
             frame.setLayout(new BorderLayout());
-            frame.add(panelE, BorderLayout.CENTER);        
+            frame.add(panelG, BorderLayout.CENTER);        
             frame.pack();
             frame.setVisible(true);
             
@@ -357,7 +357,9 @@ public class equipoPanel extends javax.swing.JPanel {
                     JOptionPane.ERROR_MESSAGE);
         
     }//GEN-LAST:event_jButton1ActionPerformed
-
+    public GamePanel getGame(){
+        return this.panelG;
+    }
     private void textField4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_textField4ActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_textField4ActionPerformed
@@ -373,7 +375,7 @@ public class equipoPanel extends javax.swing.JPanel {
     private void maxpActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_maxpActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_maxpActionPerformed
-
+    GamePanel panelG;
     Equipo team_1 = new Equipo(); 
     Equipo team_2 = new Equipo(); 
     Partida par = new Partida();

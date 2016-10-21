@@ -9,6 +9,7 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.List;
 import javax.swing.Box;
 import javax.swing.JLabel;
 import javax.swing.JMenu;
@@ -41,6 +42,7 @@ public class initial extends javax.swing.JFrame {
             @Override
             public void menuSelected(MenuEvent e) {
                 goBack();
+                save();
             }
             @Override
             public void menuDeselected(MenuEvent e) {}
@@ -175,6 +177,11 @@ public class initial extends javax.swing.JFrame {
         jButton6 = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        addWindowListener(new java.awt.event.WindowAdapter() {
+            public void windowClosing(java.awt.event.WindowEvent evt) {
+                commit(evt);
+            }
+        });
 
         jLabel2.setFont(new java.awt.Font("Droid Sans", 0, 36)); // NOI18N
         jLabel2.setText("DOMINOTA");
@@ -326,7 +333,7 @@ public class initial extends javax.swing.JFrame {
 
     private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton5ActionPerformed
         String info = j.Top3Puntos();
-        infoteamsPanel panelE = new infoteamsPanel(info);
+        panelE = new infoteamsPanel(info);
         panelE.setBackground(Color.white);
         this.getContentPane().removeAll();
         this.setLayout(new BorderLayout());
@@ -339,14 +346,56 @@ public class initial extends javax.swing.JFrame {
     }//GEN-LAST:event_jButton5ActionPerformed
 
     private void jButton6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton6ActionPerformed
-        j.cargar_partida();
+        Partida p = j.cargar_partida();
+        if(j.isTeam()){
+            System.out.println("team");
+            List <Equipo> eq = j.cargar_partidaTeam();
+            for (Equipo e : eq) {
+                System.out.println(e.getNombre());
+            }
+            panelG = new GamePanel(j.db, eq.get(0), eq.get(1), p, j);
+            panelG.setBackground(Color.white);
+            this.getContentPane().removeAll();
+            this.setLayout(new BorderLayout());
+            this.add(panelG, BorderLayout.CENTER);        
+            this.pack();
+            this.setVisible(true);
+        }else{
+            List <Jugador> eq = j.cargar_partidaPlayer();
+            for (Jugador e : eq) {
+                System.out.println(e.getNombre());
+            }
+            panelG = new GamePanel(j.db, eq, p, j);
+            panelG.setBackground(Color.white);
+            this.getContentPane().removeAll();
+            this.setLayout(new BorderLayout());
+            this.add(panelG, BorderLayout.CENTER);        
+            this.pack();
+            this.setVisible(true);
+        }
     }//GEN-LAST:event_jButton6ActionPerformed
+
+    private void commit(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_commit
+        System.out.println("out");
+        this.save();
+    }//GEN-LAST:event_commit
+    private void save(){
+        System.out.println("out");
+        //this.panelG = panelEq.getGame();
+        if(panelG == null && panelEq != null)
+            panelG = panelEq.getGame();
+        if(panelG == null  && panelI != null)
+            panelG = panelI.getGame();
+        
+        if(panelG != null)
+            panelG.save();
+    }
     public void addPanelEquipo(Dbgestor db) { 
-        equipoPanel panelE = new equipoPanel(db, this.j);
-        panelE.setBackground(Color.white);
+        panelEq = new equipoPanel(db, this.j);
+        panelEq.setBackground(Color.white);
         this.getContentPane().removeAll();
         this.setLayout(new BorderLayout());
-        this.add(panelE, BorderLayout.CENTER);        
+        this.add(panelEq, BorderLayout.CENTER);        
         pack();
         /*getContentPane().validate();
         getContentPane().repaint();*/
@@ -623,11 +672,12 @@ public class initial extends javax.swing.JFrame {
     }
     
      public void addPanelIndividual(Dbgestor db) { 
-        panelIndividual panelI = new panelIndividual(db, j);
+        panelI = new panelIndividual(db, j);
         panelI.setBackground(Color.white);
         this.getContentPane().removeAll();
         this.setLayout(new BorderLayout());
-        this.add(panelI, BorderLayout.CENTER);        
+        this.add(panelI, BorderLayout.CENTER);
+        this.panelG = panelI.getGame();
         pack();
         /*getContentPane().validate();
         getContentPane().repaint();*/
@@ -655,7 +705,10 @@ public class initial extends javax.swing.JFrame {
         
     }
     private Juego j = new Juego(this);
-
+    private GamePanel panelG;
+    private infoteamsPanel panelE;
+    equipoPanel panelEq;
+    private panelIndividual panelI;
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private java.awt.Choice choice1;
     private javax.swing.JButton jButton1;

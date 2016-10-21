@@ -225,7 +225,9 @@ public class panelIndividual extends javax.swing.JPanel {
     private void player_3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_player_3ActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_player_3ActionPerformed
-
+    public GamePanel getGame(){
+        return this.panelG;
+    }
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         int qty = 0;
         List<Jugador> ju = new ArrayList <Jugador>();
@@ -263,7 +265,7 @@ public class panelIndividual extends javax.swing.JPanel {
             par.SetPuntos(maxPoints);
             initial frame;
             frame = (initial)SwingUtilities.getWindowAncestor(this);
-            GamePanel panelG = new GamePanel(db, ju, par, this.j);
+            panelG = new GamePanel(db, ju, par, this.j);
             panelG.setBackground(Color.white);
             frame.getContentPane().removeAll();
             frame.setLayout(new BorderLayout());
@@ -287,7 +289,7 @@ public class panelIndividual extends javax.swing.JPanel {
         // TODO add your handling code here:
     }//GEN-LAST:event_maxpActionPerformed
 
-
+    private GamePanel panelG;
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButton1;
     private javax.swing.JLabel jLabel10;

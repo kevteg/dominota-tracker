@@ -78,7 +78,6 @@ public class GamePanel extends javax.swing.JPanel {
             this.addTeam4.setVisible(false);
         }
     }
-
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -297,7 +296,7 @@ public class GamePanel extends javax.swing.JPanel {
             ju.get(3).setManos(puntos);
             ju.get(3).asignar_puntos(puntos);
             ju.get(3).setTurno(turno);
-            model.addRow(new Object[]{"-", "-", "-", puntos + "-" + ju.get(2).GetPuntos()});
+            model.addRow(new Object[]{"-", "-", "-", puntos + "-" + ju.get(3).GetPuntos()});
             turno++;
         }
         check();
@@ -307,6 +306,25 @@ public class GamePanel extends javax.swing.JPanel {
         for (Jugador jugador : ju) 
             zero = zero || jugador.GetPuntos() == 0;
         return zero;
+    }
+    public void save(){
+        System.out.println("saving..");
+        if(modo == EQUIPO){
+                List<Equipo> eq = new ArrayList <Equipo>();
+                eq.add(team_1);
+                eq.add(team_2);
+                par.SetEquipo(eq);
+                db.AgregarPartida(par);
+                db.agregarEquipo(team_1);
+                db.agregarEquipo(team_2);
+                j.GraficaPartidaEquipos(par);
+            }else{     
+                par.SetJugador(ju);
+                db.AgregarPartida(par);
+                for(Jugador jugador : ju)
+                    db.AgregarJugador(jugador);
+                j.GraficaPartidaIndividual(par);
+            }
     }
     private void check(){
         
@@ -331,29 +349,7 @@ public class GamePanel extends javax.swing.JPanel {
                        :(singleZero());
         String icon = shoe?"shoe.png":"ok.png";
         if(!message.equals("")){
-            
-            if(modo == EQUIPO){
-                //j = new Juego(null);
-                List<Equipo> eq = new ArrayList <Equipo>();
-                eq.add(team_1);
-                eq.add(team_2);
-                par.SetEquipo(eq);
-                db.AgregarPartida(par);
-                db.agregarEquipo(team_1);
-                db.agregarEquipo(team_2);
-                j.GraficaPartidaEquipos(par);
-            }else{     
-                //j = new Juego(null);
-                par.SetJugador(ju);
-                db.AgregarPartida(par);
-                
-                for(Jugador jugador : ju)
-                    db.AgregarJugador(jugador);
-                    
-                j.GraficaPartidaIndividual(par);
-            }
-                
-            
+           this.save();
             initial ventana = (initial) SwingUtilities.getWindowAncestor(this);
             System.out.println(message);
             //ImageIcon icon = new ImageIcon("shoe.ico"));

@@ -24,7 +24,7 @@ import org.jfree.data.category.DefaultCategoryDataset;
  */
 public class Juego {
     
-    private Dbgestor db;
+    public Dbgestor db;
     private initial frame;
     
     public Juego(initial frame){
@@ -56,6 +56,9 @@ public class Juego {
         options[1]); //default button title
         System.out.println(n);
         partidaInterfaz(n);
+    }
+    public void save(){
+        
     }
     
     public void partidaInterfaz(int opc){
@@ -687,31 +690,39 @@ public class Juego {
         }
 
     }
-    public void cargar_partida(){
+    public boolean isTeam(){
         List <Partida> p = db.GetBddatos().query(Partida.class);
-        List <Jugador> jug = new ArrayList<Jugador>();
+        int cargar = p.size() - 1;
+        boolean team = false;
+        if (p.get(cargar).getEquipo().isEmpty()==false)
+            team = true;
+        
+        return team;
+    }
+    public List <Equipo> cargar_partidaTeam(){
+        List <Partida> p = db.GetBddatos().query(Partida.class);
         List <Equipo> equ = new ArrayList<Equipo>();
-        int cargar = p.size();
-        int puntos = 0;
-        String fecha="";
-        if (p.get(cargar).getEquipo().isEmpty()==true){
-        //jugador
-            //puntos partidas
-            puntos=p.get(cargar).GetPuntos();
-            fecha = p.get(cargar).GetFecha();
-            for (Jugador j : p.get(cargar).getJugador())
-                jug.add(j);
-            
-            
-        }else{
-            puntos=p.get(cargar).GetPuntos();
-            fecha = p.get(cargar).GetFecha();
+        int cargar = p.size() - 1;
+        if (p.get(cargar).getEquipo().isEmpty()==false)
             for (Equipo j : p.get(cargar).getEquipo())
                 equ.add(j);
-            //equipo
-        }
-        System.out.println(jug);
-    
+        return equ;
+    }
+    public Partida cargar_partida(){
+        List <Partida> p = db.GetBddatos().query(Partida.class);
+        List <Equipo> equ = new ArrayList<Equipo>();
+        int cargar = p.size() - 1;
+        return p.get(cargar);
+    }
+    public List <Jugador> cargar_partidaPlayer(){
+        List <Partida> p = db.GetBddatos().query(Partida.class);
+        List <Jugador> jug = new ArrayList<Jugador>();
+        int cargar = p.size() - 1;
+        if (p.get(cargar).getEquipo().isEmpty()==true)
+            for (Jugador j : p.get(cargar).getJugador())
+                jug.add(j);
+        
+        return jug;
     }
 
 }
